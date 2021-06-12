@@ -3,6 +3,8 @@ import { Button, ButtonType } from "office-ui-fabric-react";
 import Header from "./Header";
 import HeroList, { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
+// import  "./Functions";
+
 // images references in the manifest
 import "../../../assets/icon-16.png";
 import "../../../assets/icon-32.png";
@@ -49,12 +51,15 @@ export default class App extends React.Component<AppProps, AppState> {
      * Insert your Outlook code here
      */
 
-    let sTo: Office.Recipients = Office.context.mailbox.item.to;
+
+    let emailTo: Office.Recipients = Office.context.mailbox.item.to;
+
      let salutation: string = "";
-     let firstName:string = "";
-     
-     for (let t of sTo) {
-       firstName = t.displayName.split(" ", 1); 
+     let firstName: string = "";
+
+     for (let t in emailTo["displayName"]) {
+      console.log(t);
+      firstName = t.split(" ", 1).toString(); 
        salutation = salutation + firstName + " and";
      }
      
