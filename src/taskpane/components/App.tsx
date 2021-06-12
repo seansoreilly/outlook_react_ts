@@ -4,6 +4,8 @@ import Header from "./Header";
 import HeroList, { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
 import * as Functions from "./Functions";
+import * as Commands from "../../commands/commands";
+
 /// <reference path="./Functions.tsx"/>
 
 // images references in the manifest
@@ -54,24 +56,7 @@ export default class App extends React.Component<AppProps, AppState> {
 
     var getSalutation:string = Functions.salutation(Office.context.mailbox.item.to);
     console.log(getSalutation);
-
-    // let emailTo: Office.Recipients = Office.context.mailbox.item.to;
-
-    //  let salutation: string = "";
-    //  let firstName: string = "";
-
-    //  for (let t in emailTo["displayName"]) {
-    //   console.log(t);
-    //   firstName = t.split(" ", 1).toString(); 
-    //    salutation = salutation + firstName + " and";
-    //  }
-     
-    //  //remove last "and"
-    //  salutation = salutation.substr(0,salutation.length - 3);
-     
-    //  salutation = "Hi " + salutation;
-     
-    //  console.log(salutation);
+    Commands.putNotificationMessage(getSalutation);
 
   };
 

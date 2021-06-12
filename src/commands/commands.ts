@@ -28,6 +28,19 @@ function action(event: Office.AddinCommands.Event) {
   event.completed();
 }
 
+export function putNotificationMessage(messageText: string) {
+  const message: Office.NotificationMessageDetails = {
+    type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
+    message: messageText,
+    icon: "Icon.80x80",
+    persistent: true,
+  };
+
+  // Show a notification message
+  Office.context.mailbox.item.notificationMessages.replaceAsync("action", message);
+
+}
+
 function getGlobal() {
   return typeof self !== "undefined"
     ? self
