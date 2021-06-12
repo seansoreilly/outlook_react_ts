@@ -23,7 +23,7 @@ module.exports = async (env, options)  => {
     ],
     taskpane: [
         'react-hot-loader/patch',
-        './src/taskpane/index.tsx',
+        './src/taskpane/index.tsx'
     ],
     commands: './src/commands/commands.ts'
     },

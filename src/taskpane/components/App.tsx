@@ -3,7 +3,8 @@ import { Button, ButtonType } from "office-ui-fabric-react";
 import Header from "./Header";
 import HeroList, { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
-// import  "./Functions";
+import * as Functions from "./Functions";
+/// <reference path="./Functions.tsx"/>
 
 // images references in the manifest
 import "../../../assets/icon-16.png";
@@ -51,24 +52,26 @@ export default class App extends React.Component<AppProps, AppState> {
      * Insert your Outlook code here
      */
 
+    var getSalutation:string = Functions.salutation(Office.context.mailbox.item.to);
+    console.log(getSalutation);
 
-    let emailTo: Office.Recipients = Office.context.mailbox.item.to;
+    // let emailTo: Office.Recipients = Office.context.mailbox.item.to;
 
-     let salutation: string = "";
-     let firstName: string = "";
+    //  let salutation: string = "";
+    //  let firstName: string = "";
 
-     for (let t in emailTo["displayName"]) {
-      console.log(t);
-      firstName = t.split(" ", 1).toString(); 
-       salutation = salutation + firstName + " and";
-     }
+    //  for (let t in emailTo["displayName"]) {
+    //   console.log(t);
+    //   firstName = t.split(" ", 1).toString(); 
+    //    salutation = salutation + firstName + " and";
+    //  }
      
-     //remove last "and"
-     salutation = salutation.substr(0,salutation.length - 3);
+    //  //remove last "and"
+    //  salutation = salutation.substr(0,salutation.length - 3);
      
-     salutation = "Hi " + salutation;
+    //  salutation = "Hi " + salutation;
      
-     console.log(salutation);
+    //  console.log(salutation);
 
   };
 

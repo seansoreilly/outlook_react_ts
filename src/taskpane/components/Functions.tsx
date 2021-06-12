@@ -1,15 +1,18 @@
 
 
-  export var salutation = function() {
+  export var salutation = function(emailTo: Office.Recipients) {
+  // export function salutation() {
 
-    let emailTo: Office.Recipients = Office.context.mailbox.item.to;
+    // let emailTo: Office.Recipients = Office.context.mailbox.item.to;
 
      let salutation: string = "";
      let firstName: string = "";
+     let counter: number = 0;
 
-     for (let t in emailTo["displayName"]) {
-      console.log(t);
-      firstName = t.split(" ", 1).toString(); 
+     for (var t in emailTo) {
+    //  for (let t in emailTo["displayName"]) {
+      let fullName =  emailTo[counter]["displayName"];
+      firstName = fullName.split(" ", 1).toString(); 
        salutation = salutation + firstName + " and";
      }
      
@@ -20,5 +23,6 @@
      
      console.log(salutation);
 
+     return salutation;
 
   };
