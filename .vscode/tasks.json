@@ -74,7 +74,9 @@
       // 2. Sideload your Add-in. https://docs.microsoft.com/en-us/office/dev/add-ins/testing/sideload-office-add-ins-for-testing
       "label": "Debug: Web",
       "type": "npm",
-      "script": "start:web -- --document ${input:officeOnlineDocumentUrl}",
+      // "script": "start:web -- --document ${input:officeOnlineDocumentUrl}",
+      // "script": "start:web -- --document https://outlook.office365.com/owa/",
+      "script": "start:web",
       "presentation": {
         "clear": true,
         "panel": "shared",

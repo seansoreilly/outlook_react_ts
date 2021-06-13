@@ -1,33 +1,45 @@
+export var salutation = function (emailTo) {
 
+  var salutation: string = "";
+  var countOfTo: number = 0;
+  countOfTo = emailTo.lastIndex;
 
-  // export var salutation = function(emailTo: Office.Recipients) {
-  export var salutation = function(emailTo) {
-  // export function salutation() {
+  switch (countOfTo) {
+    case 0: {
+      console.log(countOfTo);
+      salutation =
+        "Hi " + firstName(emailTo[0]["displayName"]);
+      break;
+    }
+    case 1: {
+      console.log(countOfTo);
+      salutation =
+        "Hi "
+        + firstName(emailTo[0]["displayName"]) + " and "
+        + firstName(emailTo[1]["displayName"]);
+      break;
+    }
+    case 2: {
+      console.log(countOfTo);
+      salutation =
+        "Hi "
+        + firstName(emailTo[0]["displayName"]) + ", "
+        + firstName(emailTo[1]["displayName"]) + " and "
+        + firstName(emailTo[2]["displayName"])
+      break;
+    }
+    default: {
+      salutation =
+        "Hi all";
+      break;
+    }
+  }
 
-    // let emailTo: Office.Recipients = Office.context.mailbox.item.to;
+  return salutation;
 
-     var salutation: string = "";
-     var fullName: string = "";
-     var firstName: string = "";
-     var countOfTo:number = 0;
-     var toEnumerator:number = 0;
-     countOfTo  = emailTo.lastIndex;
+};
 
-    //  for (let toEnumerator = 0, toEnumerator < countOfTo; toEnumerator++) {
-     for (toEnumerator = 0; toEnumerator <= countOfTo; toEnumerator) {
-      fullName =  emailTo[toEnumerator++]["displayName"];
-      firstName = fullName.split(" ", 1).toString(); 
-       salutation = salutation + " " + firstName + " and";
-     }
-     
-     //remove last "and"
-     var salutationLength:number = 0;
-     salutationLength = salutation.length;
+function firstName(fullName: string) {
+  return fullName.split(" ", 1).toString();
 
-     salutation = salutation.substr(1,salutationLength - 5);
-     
-     salutation = "Hi " + salutation;
-     
-     return salutation;
-
-  };
+}
