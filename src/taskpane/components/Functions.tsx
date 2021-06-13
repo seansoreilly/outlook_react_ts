@@ -1,18 +1,16 @@
-export var salutation = function (emailTo) {
-
+export var salutation = function (emailTo:any) {
   var salutation: string = "";
   var countOfTo: number = 0;
   countOfTo = emailTo.lastIndex;
+// type: Property 'lastIndex' does not exist on type 'EmailAddressDetails'
 
   switch (countOfTo) {
     case 0: {
-      console.log(countOfTo);
       salutation =
         "Hi " + firstName(emailTo[0]["displayName"]);
       break;
     }
     case 1: {
-      console.log(countOfTo);
       salutation =
         "Hi "
         + firstName(emailTo[0]["displayName"]) + " and "
@@ -20,7 +18,6 @@ export var salutation = function (emailTo) {
       break;
     }
     case 2: {
-      console.log(countOfTo);
       salutation =
         "Hi "
         + firstName(emailTo[0]["displayName"]) + ", "
