@@ -65,9 +65,8 @@ function onMessageComposeHandler(event) {
   console.log(event);
 
   var arrayOfToRecipients: any;
-  var arrayOfCustomProperties: any;
 
-  Office.context.mailbox.item.getSharedPropertiesAsync(arrayOfCustomProperties);
+  // Office.context.mailbox.item.getSharedPropertiesAsync(arrayOfCustomProperties);
 
   // Link to full sample: https://raw.githubusercontent.com/OfficeDev/office-js-snippets/prod/samples/outlook/30-recipients-and-attendees/get-set-bcc-message-compose.yaml
   Office.context.mailbox.item.to.getAsync(function (asyncResult) {
