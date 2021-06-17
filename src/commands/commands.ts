@@ -59,7 +59,8 @@ const g = getGlobal() as any;
 g.action = action;
 
 function onMessageComposeHandler(event) {
-  // setSubject(event);
+
+  setSubject(event);
 
   console.log(event);
 
@@ -86,32 +87,28 @@ function onMessageComposeHandler(event) {
     // var content = getSalutation + "<br>";
 
   }
-
-  function onAppointmentComposeHandler(event) {
-    setSubject(event);
-  }
+}
 
 
-  function setSubject(event) {
-    Office.context.mailbox.item.subject.setAsync(
-      "Set by an event-based add-in!",
-      {
-        "asyncContext": event
-      },
-      function (asyncResult) {
-        // Handle success or error.
-        if (asyncResult.status !== Office.AsyncResultStatus.Succeeded) {
-          console.error("Failed to set subject: " + JSON.stringify(asyncResult.error));
-        }
+function setSubject(event) {
+  Office.context.mailbox.item.subject.setAsync(
+    "Set by an event-based add-in!",
+    {
+      "asyncContext": event
+    },
+    function (asyncResult) {
+      // Handle success or error.
+      if (asyncResult.status !== Office.AsyncResultStatus.Succeeded) {
+        console.error("Failed to set subject: " + JSON.stringify(asyncResult.error));
+      }
 
-        // Call event.completed() after all work is done.
-        asyncResult.asyncContext.completed();
-      });
-  }
+      // Call event.completed() after all work is done.
+      asyncResult.asyncContext.completed();
+    });
+}
 
-  // 1st parameter: FunctionName of LaunchEvent in the manifest; 2nd parameter: Its implementation in this .js file.
-  Office.actions.associate("onMessageComposeHandler", onMessageComposeHandler);
-  Office.actions.associate("onAppointmentComposeHandler", onAppointmentComposeHandler);
+// 1st parameter: FunctionName of LaunchEvent in the manifest; 2nd parameter: Its implementation in this .js file.
+Office.actions.associate("onMessageComposeHandler", onMessageComposeHandler);
 
 }
 
