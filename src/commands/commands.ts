@@ -66,8 +66,6 @@ function onMessageComposeHandler(event) {
 
   var arrayOfToRecipients: any;
 
-  // Office.context.mailbox.item.getSharedPropertiesAsync(arrayOfCustomProperties);
-
   // Link to full sample: https://raw.githubusercontent.com/OfficeDev/office-js-snippets/prod/samples/outlook/30-recipients-and-attendees/get-set-bcc-message-compose.yaml
   Office.context.mailbox.item.to.getAsync(function (asyncResult) {
     if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
@@ -83,7 +81,6 @@ function onMessageComposeHandler(event) {
 
     console.log(getSalutation);
     putNotificationMessage(getSalutation);
-    // var content = getSalutation + "<br>";
 
   }
 }
@@ -108,8 +105,3 @@ function setSubject(event) {
 
 // 1st parameter: FunctionName of LaunchEvent in the manifest; 2nd parameter: Its implementation in this .js file.
 Office.actions.associate("onMessageComposeHandler", onMessageComposeHandler);
-
-}
-
-
-
