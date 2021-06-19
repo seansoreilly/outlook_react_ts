@@ -4,11 +4,10 @@ import Header from "./Header";
 import HeroList, { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
 import * as Functions from "./Functions";
+import * as Aws from "./Aws";
 import * as Commands from "../../commands/commands";
 
-/// <reference path="./Functions.tsx"/>
-
-// images references in the manifest
+// image references in the manifest
 import "../../../assets/icon-16.png";
 import "../../../assets/icon-32.png";
 import "../../../assets/icon-80.png";
