@@ -56,10 +56,10 @@ export default class App extends React.Component<AppProps, AppState> {
 
     var configAws = { invokeUrl: 'https://comprehend.us-east-2.amazonaws.com/' }
     var apigClient = Aws.apigClientFactory.newClient(configAws);
-    var _result;
+    var _result = '{}';
     // var pathTemplate = '/users/{userID}/profile'
     var pathTemplate = ''
-    var method = 'POST';    
+    var method = 'POST';   
 
     var params = {
       // This is where any modeled request parameters should be added.
@@ -71,33 +71,38 @@ export default class App extends React.Component<AppProps, AppState> {
     var body = {
       // This is where you define the body of the request,
       "LanguageCode": "en",
-      "Text": "{\n    \"Text\": \"TO THE CHIEF EXECUTIVE OFFICER Sent to CEOs and CEO EAs  Dear Colleagues, MAV State Council Meeting – 'Save the Date' – Friday 21 May 2020 The next MAV State Council Meeting will be held from 9.30am to 2:30pm on Friday 21 May 2021 at the Melbourne Town Hall, Corner Swanston and Collins Streets Melbourne.  The online links will be available to submit motions and register to attend in mid-March and in accordance with the MAV Rules, motions are to be submitted no later than midnight on Friday 23 April 2021.\n}"
+      "Text": "TO THE CHIEF EXECUTIVE OFFICER"
     };
 
     var additionalParams = {
       // If there are any unmodeled query parameters or headers that must be
       //   sent with the request, add them here.
-      headers: {
-        param0: '',
-        param1: ''
-      },
-      queryParams: {
-        param0: '',
-        param1: ''
+      'headers': {
+        // 'Service': 'Comprehend',
+        'X-amz-target': 'Comprehend_20171127.DetectSentiment',
+        'Content-Type': 'application/x-amz-json-1.1'
+        // 'X-Amz-Content-Sha256': 'beaead3198f7da1e70d03ab969765e0821b24fc913697e929e726aeaebf0eba3'
+        // 'X-Amz-Date': '20210629T111743Z',
+        // 'Authorization': 'AWS4-HMAC-SHA256 Credential=AKIASGQWQXVAHSKVCJVD/20210629/us-east-2/comprehend/aws4_request, SignedHeaders=content-type;host;x-amz-content-sha256;x-amz-date;x-amz-target, Signature=2718d416061f641d4bbdd9735aa8ef322f4089f59afde1fcc3a89892193b4269'
       }
+      // queryParams: {
+      //   param0: '',
+      //   param1: ''
+      // }
     };
 
-    apigClient.invokeApi(params, pathTemplate, method, additionalParams, body)
+    // apigClient.invokeApi(params, pathTemplate, method, additionalParams, body)
+    apigClient.invokeApi('', '', method, additionalParams, body)
       .then(function (_result) {
         // Add success callback code here.
         console.log("success");
+        console.log(_result);
       }).catch(function (_result) {
         // Add error callback code here.
         console.log("error");
-        console.log(_result);
       });
 
-    console.log(_result);
+    // console.log(JSON.parse(_result));
 
     var getSalutation: string = Functions.salutation(Office.context.mailbox.item.to);
     console.log(getSalutation);
