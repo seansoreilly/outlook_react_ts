@@ -57,8 +57,9 @@ export default class App extends React.Component<AppProps, AppState> {
     var configAws = { invokeUrl: 'https://comprehend.us-east-2.amazonaws.com/' }
     var apigClient = Aws.apigClientFactory.newClient(configAws);
     var _result;
-    var pathTemplate = '/users/{userID}/profile'
-    var method = 'GET';    
+    // var pathTemplate = '/users/{userID}/profile'
+    var pathTemplate = ''
+    var method = 'POST';    
 
     var params = {
       // This is where any modeled request parameters should be added.
@@ -86,13 +87,14 @@ export default class App extends React.Component<AppProps, AppState> {
       }
     };
 
-    apigClient.invokeApi(params, method, pathTemplate, additionalParams, body)
+    apigClient.invokeApi(params, pathTemplate, method, additionalParams, body)
       .then(function (_result) {
         // Add success callback code here.
         console.log("success");
       }).catch(function (_result) {
         // Add error callback code here.
         console.log("error");
+        console.log(_result);
       });
 
     console.log(_result);
