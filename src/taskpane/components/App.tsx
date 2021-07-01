@@ -11,17 +11,6 @@ import * as Commands from "../../commands/commands";
 
 import { ComprehendClient, BatchDetectDominantLanguageCommand, DetectSentimentCommand, DetectSentimentRequest } from "@aws-sdk/client-comprehend"; // ES Modules import
 
-// a client can be shared by different commands.
-const client = new ComprehendClient({ region: "REGION" });
-const params = {
-  /** input parameters */
-};
-
-const command = new BatchDetectDominantLanguageCommand(params);
-
-const response_await = async () => {
-  const response = await client.send(command);
-};
 
 // image references in the manifest
 import "../../../assets/icon-16.png";
@@ -119,6 +108,57 @@ export default class App extends React.Component<AppProps, AppState> {
     //   });
 
     // // console.log(JSON.parse(_result));
+
+    // a client can be shared by different commands.
+    
+    const { getDefaultRoleAssumerWithWebIdentity } = require("@aws-sdk/client-sts");
+    const { defaultProvider } = require("@aws-sdk/credential-provider-node");
+    const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+    
+    const provider = defaultProvider({
+      roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity,
+    });
+    
+    const client = new ComprehendClient({ credentialDefaultProvider: provider }) 
+    
+    // const client = new ComprehendClient(
+    //   {
+    //     credentials: {
+    //       key: "AKIASGQWQXVAHSKVCJVD",
+    //       secret: "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"
+    //     },
+    //     region: "us-east-2"
+    //   }
+    // );
+
+    // let params = {
+    //   // If there are any unmodeled query parameters or headers that must be
+    //   //   sent with the request, add them here.
+    //   'headers': {
+    //     // 'Service': 'Comprehend',
+    //     'X-amz-target': 'Comprehend_20171127.DetectSentiment',
+    //     'Content-Type': 'application/x-amz-json-1.1'
+    //     // 'X-Amz-Content-Sha256': 'beaead3198f7da1e70d03ab969765e0821b24fc913697e929e726aeaebf0eba3'
+    //     // 'X-Amz-Date': '20210629T111743Z',
+    //     // 'Authorization': 'AWS4-HMAC-SHA256 Credential=AKIASGQWQXVAHSKVCJVD/20210629/us-east-2/comprehend/aws4_request, SignedHeaders=content-type;host;x-amz-content-sha256;x-amz-date;x-amz-target, Signature=2718d416061f641d4bbdd9735aa8ef322f4089f59afde1fcc3a89892193b4269'
+    //   }
+    //   // queryParams: {
+    //   //   param0: '',
+    //   //   param1: ''
+    //   // }
+    // };
+
+    const params = {
+      "LanguageCode": "en",
+      "TextList": [
+        "I have been living in Seattle for almost 4 years",
+        "It is raining today in Seattle"
+      ]
+    };
+
+    const command = new BatchDetectDominantLanguageCommand(params);
+
+    const response = await client.send(command);
 
     var getSalutation: string = Functions.salutation(Office.context.mailbox.item.to);
     console.log(getSalutation);
