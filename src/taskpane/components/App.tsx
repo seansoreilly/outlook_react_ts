@@ -8,6 +8,7 @@ import Progress from "./Progress";
 import * as Functions from "./Functions";
 // import * as Aws from "./Aws";
 import * as Commands from "../../commands/commands";
+import {customConfig} from "../../../config.js";
 
 import { ComprehendClient, BatchDetectDominantLanguageCommand, DetectSentimentCommand, DetectSentimentRequest } from "@aws-sdk/client-comprehend"; // ES Modules import
 
@@ -113,7 +114,6 @@ export default class App extends React.Component<AppProps, AppState> {
     
     const { getDefaultRoleAssumerWithWebIdentity } = require("@aws-sdk/client-sts");
     const { defaultProvider } = require("@aws-sdk/credential-provider-node");
-    const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
     
     const provider = defaultProvider({
       roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity,
