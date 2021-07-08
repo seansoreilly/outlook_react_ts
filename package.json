@@ -11,6 +11,14 @@
     "app_type_to_debug": "desktop",
     "dev_server_port": 3000
   },
+  "node": {
+    "fs": "empty"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "scripts": {
     "build": "webpack -p --mode production --https false",
     "build:dev": "webpack --mode development --https false",
@@ -28,9 +36,11 @@
   },
   "dependencies": {
     "@aws-sdk/client-comprehend": "^3.19.0",
+    "@aws-sdk/credential-provider-process": "^3.19.0",
     "aws-api-gateway-client": "^0.3.7",
     "core-js": "^3.9.1",
     "es6-promise": "^4.2.8",
+    "fs": "^0.0.1-security",
     "office-ui-fabric-react": "^7.10.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
