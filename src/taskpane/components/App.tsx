@@ -8,10 +8,12 @@ import Progress from "./Progress";
 import * as Functions from "./Functions";
 // import * as Aws from "./Aws";
 import * as Commands from "../../commands/commands";
-import {customConfig} from "../../../config.js";
+import { customConfig } from "../../../config.js";
 
-import { ComprehendClient, BatchDetectDominantLanguageCommand, DetectSentimentCommand, DetectSentimentRequest } from "@aws-sdk/client-comprehend"; // ES Modules import
+// import fs = require("fs");
 
+// ES6+ example
+// import { ComprehendClient, BatchDetectDominantLanguageCommand } from "@aws-sdk/client-comprehend";
 
 // image references in the manifest
 import "../../../assets/icon-16.png";
@@ -111,20 +113,21 @@ export default class App extends React.Component<AppProps, AppState> {
     // // console.log(JSON.parse(_result));
 
     // a client can be shared by different commands.
-    
-    const { getDefaultRoleAssumerWithWebIdentity } = require("@aws-sdk/client-sts");
-    const { defaultProvider } = require("@aws-sdk/credential-provider-node");
-    
-    const provider = defaultProvider({
-      roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity,
-    });
-    
-    const client = new ComprehendClient({ credentialDefaultProvider: provider }) 
-    
+
+    // const { getDefaultRoleAssumerWithWebIdentity } = require("@aws-sdk/client-sts");
+    // const { defaultProvider } = require("@aws-sdk/credential-provider-node");
+
+    // const provider = defaultProvider({
+    //   roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity,
+    // });
+
+    // const client = new ComprehendClient({ credentialDefaultProvider: provider })
+
     // const client = new ComprehendClient(
     //   {
     //     credentials: {
     //       key: "AKIASGQWQXVAHSKVCJVD",
+          
     //       secret: "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"
     //     },
     //     region: "us-east-2"
@@ -148,17 +151,17 @@ export default class App extends React.Component<AppProps, AppState> {
     //   // }
     // };
 
-    const params = {
-      "LanguageCode": "en",
-      "TextList": [
-        "I have been living in Seattle for almost 4 years",
-        "It is raining today in Seattle"
-      ]
-    };
+    // const params = {
+    //   "LanguageCode": "en",
+    //   "TextList": [
+    //     "I have been living in Seattle for almost 4 years",
+    //     "It is raining today in Seattle"
+    //   ]
+    // };
 
-    const command = new BatchDetectDominantLanguageCommand(params);
+    // const command = new BatchDetectDominantLanguageCommand(params);
 
-    const response = await client.send(command);
+    // const response = await client.send(command);
 
     var getSalutation: string = Functions.salutation(Office.context.mailbox.item.to);
     console.log(getSalutation);
