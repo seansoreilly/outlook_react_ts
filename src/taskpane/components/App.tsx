@@ -5,6 +5,9 @@ import HeroList, { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
 import * as Functions from "./Functions";
 import * as Commands from "../../commands/commands";
+require("../../../config.js");
+
+import { ComprehendClient, BatchDetectDominantLanguageCommand } from "@aws-sdk/client-comprehend";
 
 /// <reference path="./Functions.tsx"/>
 
@@ -54,7 +57,58 @@ export default class App extends React.Component<AppProps, AppState> {
      * Insert your Outlook code here
      */
 
-    var getSalutation:string = Functions.salutation(Office.context.mailbox.item.to);
+    console.log(process.env.accessKeyId);
+
+    const creds = {
+      accessKeyId: process.env.accessKeyId,
+      secretAccessKey: process.env.secretAccessKey
+    };
+
+    const client = new ComprehendClient({ region: "us-east-2", credentials: creds });
+
+    const params = {
+      "TextList": ["Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made."]
+    };
+
+    const command = new BatchDetectDominantLanguageCommand(params);
+
+    client.send(command).then(
+      (data) => {
+        // process data.
+        console.log(data);
+      },
+      (error) => {
+        // error handling.
+      }
+    );
+
+    // async/await.
+    // try {
+    //   const data2 = await client.send(command);
+    //   // process data.
+    // } catch (error) {
+    //   // error handling.
+    //   console.log("error");
+    // } finally {
+    //   // finally.
+    //   console.log("finally");
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var getSalutation: string = Functions.salutation(Office.context.mailbox.item.to);
     console.log(getSalutation);
     Commands.putNotificationMessage(getSalutation);
 
