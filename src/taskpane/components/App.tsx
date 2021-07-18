@@ -6,8 +6,11 @@ import Progress from "./Progress";
 import * as Functions from "./Functions";
 import * as Commands from "../../commands/commands";
 require("../../../config.js");
+// declare var emailBody: string;
 
 import { ComprehendClient, DetectKeyPhrasesCommand } from "@aws-sdk/client-comprehend";
+
+/* global Outlook, Office, OfficeExtension */
 
 // images references in the manifest
 import "../../../assets/icon-16.png";
@@ -67,11 +70,15 @@ export default class App extends React.Component<AppProps, AppState> {
       secretAccessKey: process.env.secretAccessKey
     };
 
-    var emailBody;
+    console.log("1");
+    console.log("2");
 
-    // emailBody = "Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made.";
-    // getBody.then( => emailBody);
-    // console.log(emailBody);
+    var emailBody = await getBody().then(function (result) {
+      console.log(result);
+      return result;
+    });
+
+    console.log(emailBody);
 
     const client = new ComprehendClient({ region: process.env.region, credentials: creds });
 
@@ -139,24 +146,28 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 }
 
-function pause(seconds) {
-  return new OfficeExtension.Promise(function (resolve) {
-    setTimeout(function () {
-      resolve();
-    }, seconds * 1000);
-  });
-}
-
 function getBody() {
 
-  return new OfficeExtension.Promise(function (resolve) {
+  // return new OfficeExtension.Promise(function (resolve) {
+  return new Office.Promise(function (resolve, reject) {
 
-    Office.context.mailbox.item.body.getAsync(
-      'text',
-      function (asyncResult) {
-        console.log(asyncResult.value),
-        resolve()
-      }
+    try {
+      Office.context.mailbox.item.body.getAsync(
+        'text',
+        function (asyncResult) {
+          // console.log(asyncResult.value),
+          resolve(asyncResult.value)
+        }
       )
-    });
-  }
+    }
+
+    catch (error) {
+      console.log(error.toString());
+      reject(error.toString());
+    }
+
+    finally {
+      console.log("finally");
+    }
+  });
+}
