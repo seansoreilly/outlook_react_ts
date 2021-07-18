@@ -62,25 +62,35 @@ export default class App extends React.Component<AppProps, AppState> {
       secretAccessKey: process.env.secretAccessKey
     };
 
-    const client = new ComprehendClient({ region: "us-east-2", credentials: creds });
+    var emailBody;
+
+    // const emailBody = "Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made.";
+    // Office.context.mailbox.item.body.getAsync('text', function (async) {const emailBody = async.value)});
+    Office.context.mailbox.item.body.getAsync(
+      'text',
+      function (async) { emailBody = async.value }
+    );
+
+    const client = new ComprehendClient({ region: process.env.region, credentials: creds });
 
     const params = {
-      // "TextList": ["en","Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made."]
       "LanguageCode": "en",
-      "Text": "Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made."
+      "Text": emailBody
     };
 
-    // const command = new BatchDetectDominantLanguageCommand(params);
     const command = new DetectKeyPhrasesCommand(params);
 
     client.send(command).then(
       (data) => {
         console.log(data);
-        data.KeyPhrases.forEach(element => console.log(element));
+        data.KeyPhrases.forEach(element =>
+
+          console.log(element)
+
+        );
       },
       (error) => {
-        console.log("error");
-        console.log(error);
+        console.log(error)
       }
     );
 
