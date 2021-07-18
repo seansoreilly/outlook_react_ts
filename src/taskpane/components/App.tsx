@@ -7,9 +7,7 @@ import * as Functions from "./Functions";
 import * as Commands from "../../commands/commands";
 require("../../../config.js");
 
-import { ComprehendClient, BatchDetectDominantLanguageCommand } from "@aws-sdk/client-comprehend";
-
-/// <reference path="./Functions.tsx"/>
+import { ComprehendClient, DetectKeyPhrasesCommand } from "@aws-sdk/client-comprehend";
 
 // images references in the manifest
 import "../../../assets/icon-16.png";
@@ -67,39 +65,24 @@ export default class App extends React.Component<AppProps, AppState> {
     const client = new ComprehendClient({ region: "us-east-2", credentials: creds });
 
     const params = {
-      "TextList": ["Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made."]
+      // "TextList": ["en","Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made."]
+      "LanguageCode": "en",
+      "Text": "Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made."
     };
 
-    const command = new BatchDetectDominantLanguageCommand(params);
+    // const command = new BatchDetectDominantLanguageCommand(params);
+    const command = new DetectKeyPhrasesCommand(params);
 
     client.send(command).then(
       (data) => {
-        // process data.
         console.log(data);
+        data.KeyPhrases.forEach(element => console.log(element));
       },
       (error) => {
-        // error handling.
+        console.log("error");
+        console.log(error);
       }
     );
-
-    // async/await.
-    // try {
-    //   const data2 = await client.send(command);
-    //   // process data.
-    // } catch (error) {
-    //   // error handling.
-    //   console.log("error");
-    // } finally {
-    //   // finally.
-    //   console.log("finally");
-    // }
-
-
-
-
-
-
-
 
 
 
