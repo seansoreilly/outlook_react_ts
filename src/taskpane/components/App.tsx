@@ -13,6 +13,7 @@ import { ComprehendClient, DetectKeyPhrasesCommand } from "@aws-sdk/client-compr
 import "../../../assets/icon-16.png";
 import "../../../assets/icon-32.png";
 import "../../../assets/icon-80.png";
+import { ResolvePlugin } from "webpack";
 
 export interface AppProps {
   title: string;
@@ -23,27 +24,8 @@ export interface AppState {
   listItems: HeroListItem[];
 }
 
-function getBody() {
 
-  // return new OfficeExtension.Promise(function (resolve, reject) {
 
-  try {
-
-    Office.context.mailbox.item.body.getAsync(
-      'text',
-      function (asyncResult) {
-        console.log (asyncResult.value);
-        return (asyncResult.value);
-      });
-
-  }
-  catch (error) {
-    // reject(WordMarkdownConversion.errorHandler(error));
-    console.log("error");
-  }
-  // }
-  // )
-}
 
 
 export default class App extends React.Component<AppProps, AppState> {
@@ -88,14 +70,8 @@ export default class App extends React.Component<AppProps, AppState> {
     var emailBody;
 
     // emailBody = "Further to our chat on Wednesday, attached is a draft alternate motion for the above application that is to be considered on Monday night.   As discussed, I have added a condition requiring a Waste Management Plan (condition 3) that among other matters requires the development to utilise a shared bin service, which will reduce the number of bins required by a considerable number.  Please let me know if you are OK with the alternate as drafted, or if you would like any changes made.";
-    emailBody = getBody();
-    console.log (emailBody);
-
-    // Office.context.mailbox.item.body.getAsync('text', function (async) {const emailBody = async.value)});
-    // Office.context.mailbox.item.body.getAsync(
-    //   'text',
-    //   function (async) { emailBody = async.value }
-    // );
+    // getBody.then( => emailBody);
+    // console.log(emailBody);
 
     const client = new ComprehendClient({ region: process.env.region, credentials: creds });
 
@@ -162,3 +138,26 @@ export default class App extends React.Component<AppProps, AppState> {
     );
   }
 }
+
+function pause(seconds) {
+  return new OfficeExtension.Promise(function (resolve) {
+    setTimeout(function () {
+      resolve();
+    }, seconds * 1000);
+  });
+}
+
+function getBody() {
+
+  return new OfficeExtension.Promise(function (resolve) {
+
+    try 
+    Office.context.mailbox.item.body.getAsync(
+      'text',
+      function (asyncResult) {
+        console.log(asyncResult.value),
+        resolve()
+      }
+      )
+    });
+  }
