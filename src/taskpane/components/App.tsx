@@ -151,7 +151,6 @@ function getBody() {
 
   return new OfficeExtension.Promise(function (resolve) {
 
-    try 
     Office.context.mailbox.item.body.getAsync(
       'text',
       function (asyncResult) {
