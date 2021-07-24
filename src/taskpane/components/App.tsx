@@ -105,7 +105,11 @@ export default class App extends React.Component<AppProps, AppState> {
 
     console.log(emailBody);
 
+    // NB: can't alter body of email in read mode??  What else to do
     // put text back into email
+    // await putBody(emailBody).then(function (result) {
+    //   return result;
+    // });
 
   };
 
@@ -141,7 +145,6 @@ export default class App extends React.Component<AppProps, AppState> {
 
 function getBody(): Promise<string> {
 
-  // return new OfficeExtension.Promise(function (resolve) {
   return new Office.Promise(function (resolve, reject) {
 
     try {
@@ -160,5 +163,30 @@ function getBody(): Promise<string> {
 
     finally {
     }
+  });
+}
+
+function putBody(sBody: string): Promise<any> {
+
+  return new Office.Promise(function (resolve, reject) {
+
+    try {
+      Office.context.mailbox.item.body.setAsync(
+        sBody,
+        { coercionType: Office.CoercionType.Html },
+        function (asyncResult) {
+          resolve(asyncResult.value)
+        }
+      )
+    }
+
+    catch (error) {
+      console.log(error.toString());
+      reject(error.toString());
+    }
+
+    finally {
+    }
+
   });
 }
