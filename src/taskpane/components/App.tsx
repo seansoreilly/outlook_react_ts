@@ -3,12 +3,12 @@ import { Button, ButtonType } from "office-ui-fabric-react";
 import Header from "./Header";
 import HeroList, { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
-import * as Functions from "./Functions";
-import * as Commands from "../../commands/commands";
+// import * as Functions from "./Functions";
+// import * as Commands from "../../commands/commands";
 require("../../../config.js");
 // declare var emailBody: string;
 
-import { ComprehendClient, DetectKeyPhrasesCommand } from "@aws-sdk/client-comprehend";
+import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput} from "@aws-sdk/client-comprehend";
 
 /* global Outlook, Office, OfficeExtension */
 
@@ -16,7 +16,10 @@ import { ComprehendClient, DetectKeyPhrasesCommand } from "@aws-sdk/client-compr
 import "../../../assets/icon-16.png";
 import "../../../assets/icon-32.png";
 import "../../../assets/icon-80.png";
-import { ResolvePlugin } from "webpack";
+// import { ResolvePlugin } from "webpack";
+
+// global variables
+declare let returnData:any;
 
 export interface AppProps {
   title: string;
@@ -26,10 +29,6 @@ export interface AppProps {
 export interface AppState {
   listItems: HeroListItem[];
 }
-
-
-
-
 
 export default class App extends React.Component<AppProps, AppState> {
   constructor(props, context) {
@@ -70,21 +69,18 @@ export default class App extends React.Component<AppProps, AppState> {
       secretAccessKey: process.env.secretAccessKey
     };
 
-    console.log("1");
-    console.log("2");
-
     var emailBody = await getBody().then(function (result) {
       console.log(result);
       return result;
     });
 
-    console.log(emailBody);
+    // console.log(emailBody);
 
     const client = new ComprehendClient({ region: process.env.region, credentials: creds });
 
-    const params = {
-      "LanguageCode": "en",
-      "Text": emailBody
+    const params:DetectKeyPhrasesCommandInput = {
+      LanguageCode: "en",
+      Text: emailBody
     };
 
     const command = new DetectKeyPhrasesCommand(params);
@@ -92,27 +88,21 @@ export default class App extends React.Component<AppProps, AppState> {
     client.send(command).then(
       (data) => {
         console.log(data);
-        data.KeyPhrases.forEach(element =>
-
-          console.log(element)
-
-        );
+        returnData = data;
+        // data.KeyPhrases.forEach(element =>
+        //   console.log(element)
+        // );
       },
       (error) => {
         console.log(error)
       }
     );
 
-    // Office.context.mailbox.item.body.setAsync(data: string, callback?: (asyncResult: Office.AsyncResult<void>) => void): void;
+    console.log(returnData);
 
-
-
-
-
-
-    var getSalutation: string = Functions.salutation(Office.context.mailbox.item.to);
-    console.log(getSalutation);
-    Commands.putNotificationMessage(getSalutation);
+    // var getSalutation: string = Functions.salutation(Office.context.mailbox.item.to);
+    // console.log(getSalutation);
+    // Commands.putNotificationMessage(getSalutation);
 
   };
 
@@ -167,7 +157,6 @@ function getBody() {
     }
 
     finally {
-      console.log("finally");
     }
   });
 }
