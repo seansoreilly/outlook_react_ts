@@ -8,7 +8,7 @@ import Progress from "./Progress";
 require("../../../config.js");
 // declare var emailBody: string;
 
-import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput} from "@aws-sdk/client-comprehend";
+import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput } from "@aws-sdk/client-comprehend";
 
 /* global Outlook, Office, OfficeExtension */
 
@@ -19,7 +19,7 @@ import "../../../assets/icon-80.png";
 // import { ResolvePlugin } from "webpack";
 
 // global variables
-declare let returnData:any;
+declare let returnData: any;
 
 export interface AppProps {
   title: string;
@@ -57,28 +57,21 @@ export default class App extends React.Component<AppProps, AppState> {
     });
   }
 
-
   click = async () => {
-
-    /**
-     * Insert your Outlook code here
-     */
 
     const creds = {
       accessKeyId: process.env.accessKeyId,
       secretAccessKey: process.env.secretAccessKey
     };
 
-    let emailBody:string = await getBody().then(function (result) {
+    let emailBody: string = await getBody().then(function (result) {
       console.log(result);
       return result;
     });
 
-    // console.log(emailBody);
-
     const client = new ComprehendClient({ region: process.env.region, credentials: creds });
 
-    const params:DetectKeyPhrasesCommandInput = {
+    const params: DetectKeyPhrasesCommandInput = {
       LanguageCode: "en",
       Text: emailBody
     };
@@ -87,19 +80,12 @@ export default class App extends React.Component<AppProps, AppState> {
 
     client.send(command).then(
       (data) => {
-        console.log(data);
         returnData = data;
       },
       (error) => {
         console.log(error)
       }
     );
-
-    console.log(returnData);
-
-    // var getSalutation: string = Functions.salutation(Office.context.mailbox.item.to);
-    // console.log(getSalutation);
-    // Commands.putNotificationMessage(getSalutation);
 
   };
 
