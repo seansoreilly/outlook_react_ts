@@ -69,7 +69,7 @@ export default class App extends React.Component<AppProps, AppState> {
       secretAccessKey: process.env.secretAccessKey
     };
 
-    var emailBody = await getBody().then(function (result) {
+    let emailBody:string = await getBody().then(function (result) {
       console.log(result);
       return result;
     });
@@ -89,9 +89,6 @@ export default class App extends React.Component<AppProps, AppState> {
       (data) => {
         console.log(data);
         returnData = data;
-        // data.KeyPhrases.forEach(element =>
-        //   console.log(element)
-        // );
       },
       (error) => {
         console.log(error)
@@ -136,7 +133,7 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 }
 
-function getBody() {
+function getBody(): Promise<string> {
 
   // return new OfficeExtension.Promise(function (resolve) {
   return new Office.Promise(function (resolve, reject) {
