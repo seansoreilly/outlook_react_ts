@@ -86,8 +86,6 @@ export default class App extends React.Component<AppProps, AppState> {
       }
     );
 
-    // console.log(emailBody);
-
     returnData.KeyPhrases.reverse().forEach(KeyPhrase => {
       console.log(KeyPhrase);
       // last bold
@@ -99,7 +97,6 @@ export default class App extends React.Component<AppProps, AppState> {
       var b = "<mark>";
       var position = KeyPhrase.BeginOffset;
       emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
-
 
     });
 
