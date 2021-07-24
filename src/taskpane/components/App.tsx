@@ -19,7 +19,7 @@ import "../../../assets/icon-80.png";
 // import { ResolvePlugin } from "webpack";
 
 // global variables
-declare let returnData: any;
+let returnData: any;
 
 export interface AppProps {
   title: string;
@@ -65,7 +65,6 @@ export default class App extends React.Component<AppProps, AppState> {
     };
 
     let emailBody: string = await getBody().then(function (result) {
-      console.log(result);
       return result;
     });
 
@@ -86,6 +85,27 @@ export default class App extends React.Component<AppProps, AppState> {
         console.log(error)
       }
     );
+
+    // console.log(emailBody);
+
+    returnData.KeyPhrases.reverse().forEach(KeyPhrase => {
+      console.log(KeyPhrase);
+      // last bold
+      var b = "</mark>";
+      var position = KeyPhrase.EndOffset;
+      emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
+
+      // first bold
+      var b = "<mark>";
+      var position = KeyPhrase.BeginOffset;
+      emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
+
+
+    });
+
+    console.log(emailBody);
+
+    // put text back into email
 
   };
 
@@ -128,7 +148,6 @@ function getBody(): Promise<string> {
       Office.context.mailbox.item.body.getAsync(
         'text',
         function (asyncResult) {
-          // console.log(asyncResult.value),
           resolve(asyncResult.value)
         }
       )
