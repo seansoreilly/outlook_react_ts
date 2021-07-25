@@ -3,9 +3,10 @@ import { Button, ButtonType } from "office-ui-fabric-react";
 import Header from "./Header";
 import HeroList, { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
+import DetectKeyPhrases from "./DetectKeyPhrases/DetectKeyPhrases";
 // import * as Functions from "./Functions";
 // import * as Commands from "../../commands/commands";
-require("../../../config.js");
+// require("../../../config.js");
 // declare var emailBody: string;
 
 import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput } from "@aws-sdk/client-comprehend";
@@ -19,7 +20,7 @@ import "../../../assets/icon-80.png";
 // import { ResolvePlugin } from "webpack";
 
 // global variables
-let returnData: any;
+// let returnData: any;
 
 export interface AppProps {
   title: string;
@@ -59,54 +60,15 @@ export default class App extends React.Component<AppProps, AppState> {
 
   click = async () => {
 
-    const creds = {
-      accessKeyId: process.env.accessKeyId,
-      secretAccessKey: process.env.secretAccessKey
-    };
+    //figure out how to call the function from here
+    const DKP = new DetectKeyPhrases();
+    let emailBody2: any = DKP.getKeyPhrases();
+    //working OK, but returning promise rather than value
 
-    let emailBody: string = await getBody().then(function (result) {
-      return result;
-    });
 
-    const client = new ComprehendClient({ region: process.env.region, credentials: creds });
 
-    const params: DetectKeyPhrasesCommandInput = {
-      LanguageCode: "en",
-      Text: emailBody
-    };
 
-    const command = new DetectKeyPhrasesCommand(params);
-
-    client.send(command).then(
-      (data) => {
-        returnData = data;
-      },
-      (error) => {
-        console.log(error)
-      }
-    );
-
-    returnData.KeyPhrases.reverse().forEach(KeyPhrase => {
-      console.log(KeyPhrase);
-      // last bold
-      var b = "</mark>";
-      var position = KeyPhrase.EndOffset;
-      emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
-
-      // first bold
-      var b = "<mark>";
-      var position = KeyPhrase.BeginOffset;
-      emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
-
-    });
-
-    console.log(emailBody);
-
-    // NB: can't alter body of email in read mode??  What else to do
-    // put text back into email
-    // await putBody(emailBody).then(function (result) {
-    //   return result;
-    // });
+    console.log(emailBody2);
 
   };
 
@@ -163,27 +125,28 @@ function getBody(): Promise<string> {
   });
 }
 
-function putBody(sBody: string): Promise<any> {
+// NB: not used at the moment
+// function putBody(sBody: string): Promise<any> {
 
-  return new Office.Promise(function (resolve, reject) {
+//   return new Office.Promise(function (resolve, reject) {
 
-    try {
-      Office.context.mailbox.item.body.setAsync(
-        sBody,
-        { coercionType: Office.CoercionType.Html },
-        function (asyncResult) {
-          resolve(asyncResult.value)
-        }
-      )
-    }
+//     try {
+//       Office.context.mailbox.item.body.setAsync(
+//         sBody,
+//         { coercionType: Office.CoercionType.Html },
+//         function (asyncResult) {
+//           resolve(asyncResult.value)
+//         }
+//       )
+//     }
 
-    catch (error) {
-      console.log(error.toString());
-      reject(error.toString());
-    }
+//     catch (error) {
+//       console.log(error.toString());
+//       reject(error.toString());
+//     }
 
-    finally {
-    }
+//     finally {
+//     }
 
-  });
-}
+//   });
+// }
