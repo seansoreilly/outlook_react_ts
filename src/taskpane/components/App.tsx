@@ -50,9 +50,6 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   click = async () => {
-    /**
-     * Insert your Outlook code here
-     */
 
     var getSalutation:string = Functions.salutation(Office.context.mailbox.item.to);
     console.log(getSalutation);
