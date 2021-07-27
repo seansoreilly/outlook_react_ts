@@ -60,15 +60,10 @@ export default class App extends React.Component<AppProps, AppState> {
 
   click = async () => {
 
-    //figure out how to call the function from here
     const DKP = new DetectKeyPhrases();
-    let emailBody2: any = DKP.getKeyPhrases();
-    //working OK, but returning promise rather than value
+    let emailBody: any = DKP.getKeyPhrases();
 
-
-
-
-    console.log(emailBody2);
+    console.log(emailBody);
 
   };
 
