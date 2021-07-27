@@ -29,8 +29,7 @@ export default class DetectKeyPhrases {
 
     returnData = await client.send(command);
 
-    returnData.KeyPhrases.reverse().forEach((KeyPhrase: { EndOffset: any; }) => {
-      console.log(KeyPhrase);
+    returnData.KeyPhrases.reverse().forEach((KeyPhrase) => {
       // last bold
       var b = "</mark>";
       var position = KeyPhrase.EndOffset;
