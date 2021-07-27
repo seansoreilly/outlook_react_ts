@@ -61,7 +61,8 @@ export default class App extends React.Component<AppProps, AppState> {
   click = async () => {
 
     const DKP = new DetectKeyPhrases();
-    let emailBody: any = DKP.getKeyPhrases();
+    await DKP.getKeyPhrases();
+    let emailBody: any = DKP.emailBody;
 
     console.log(emailBody);
 
