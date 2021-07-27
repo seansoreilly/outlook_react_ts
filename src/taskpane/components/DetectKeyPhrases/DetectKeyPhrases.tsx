@@ -27,16 +27,9 @@ export default class DetectKeyPhrases {
 
     const command = new DetectKeyPhrasesCommand(params);
 
-    client.send(command).then(
-      (data) => {
-        returnData = data;
-      },
-      (error) => {
-        console.log(error)
-      }
-    );
+    returnData = await client.send(command);
 
-    returnData.KeyPhrases.reverse().forEach(KeyPhrase => {
+    returnData.KeyPhrases.reverse().forEach((KeyPhrase: { EndOffset: any; }) => {
       console.log(KeyPhrase);
       // last bold
       var b = "</mark>";
@@ -44,9 +37,9 @@ export default class DetectKeyPhrases {
       this.emailBody = [this.emailBody.slice(0, position), b, this.emailBody.slice(position)].join('');
 
       // first bold
-      // var b = "<mark>";
-      // var position = KeyPhrase.BeginOffset;
-      // emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
+      var b = "<mark>";
+      var position = KeyPhrase.BeginOffset;
+      this.emailBody = [this.emailBody.slice(0, position), b, this.emailBody.slice(position)].join('');
 
     });
 
