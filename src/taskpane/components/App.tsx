@@ -1,15 +1,14 @@
 import * as React from "react";
-import { Button, ButtonType } from "office-ui-fabric-react";
-import Header from "./Header";
-import HeroList, { HeroListItem } from "./HeroList";
+import * as ReactDOMServer from 'react-dom/server';
+import { ActionButton, ButtonType } from "office-ui-fabric-react";
+// import { Button, ActionButton, ButtonType } from "office-ui-fabric-react";
+// import Header from "./Header";
+// import HeroList, { HeroListItem } from "./HeroList";
+import { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
 import DetectKeyPhrases from "./DetectKeyPhrases/DetectKeyPhrases";
-// import * as Functions from "./Functions";
-// import * as Commands from "../../commands/commands";
-// require("../../../config.js");
-// declare var emailBody: string;
 
-import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput } from "@aws-sdk/client-comprehend";
+// import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput } from "@aws-sdk/client-comprehend";
 
 /* global Outlook, Office, OfficeExtension */
 
@@ -17,10 +16,8 @@ import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput
 import "../../../assets/icon-16.png";
 import "../../../assets/icon-32.png";
 import "../../../assets/icon-80.png";
+import ReactDOM = require("react-dom");
 // import { ResolvePlugin } from "webpack";
-
-// global variables
-// let returnData: any;
 
 export interface AppProps {
   title: string;
@@ -64,11 +61,16 @@ export default class App extends React.Component<AppProps, AppState> {
     await DKP.getKeyPhrases();
     let emailBody: any = DKP.emailBody;
 
-    console.log(emailBody);
+    // console.log(emailBody);
+    const emailBodyHTML = <div className="Container" dangerouslySetInnerHTML={{__html: emailBody}}></div>;
+
+    // ReactDOM.render(emailBody, document.getElementById('displayResult'));
+    ReactDOM.render(emailBodyHTML, document.getElementById('displayResult'));
 
   };
 
   render() {
+
     const { title, isOfficeInitialized } = this.props;
 
     if (!isOfficeInitialized) {
@@ -78,21 +80,35 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     return (
-      <div className="ms-welcome">
-        <Header logo="assets/logo-filled.png" title={this.props.title} message="Welcome" />
-        <HeroList message="Discover what Office Add-ins can do for you today!" items={this.state.listItems}>
-          <p className="ms-font-l">
+      <div>
+        <div className="ms-welcome">
+          {/* <Header logo="assets/logo-filled.png" title={this.props.title} message="Welcome" /> */}
+          {/* <HeroList message="Discover what Office Add-ins can do for you today!" items={this.state.listItems}> */}
+          {/* <p className="ms-font-l">
             Modify the source files, then click <b>Run</b>.
-          </p>
-          <Button
+          </p> */}
+          {/* <Button
             className="ms-welcome__action"
             buttonType={ButtonType.hero}
             iconProps={{ iconName: "ChevronRight" }}
             onClick={this.click}
           >
             Run
-          </Button>
-        </HeroList>
+          </Button> */}
+          {/* </HeroList> */}
+          <ActionButton
+            className="ms-welcome__action"
+            // buttonType={ButtonType.hero}
+            buttonType={ButtonType.command}
+            iconProps={{ iconName: "ChevronRight" }}
+            onClick={this.click}
+          >
+            Run
+          </ActionButton >
+
+        </div>
+        <div id="displayResult" className="ms-welcome__html" >
+        </div>
       </div>
     );
   }
