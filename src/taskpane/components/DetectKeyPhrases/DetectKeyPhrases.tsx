@@ -1,4 +1,4 @@
-import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput } from "@aws-sdk/client-comprehend";
+import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput, KeyPhrase } from "@aws-sdk/client-comprehend";
 require("../../../../config.js");
 
 export default class DetectKeyPhrases {
@@ -25,21 +25,25 @@ export default class DetectKeyPhrases {
       Text: this.emailBody
     };
 
-    const command = new DetectKeyPhrasesCommand(params);
+    const detectKeyPhrasesCommand: DetectKeyPhrasesCommand = new DetectKeyPhrasesCommand(params);
 
-    returnData = await client.send(command);
+    returnData = await client.send(detectKeyPhrasesCommand);
 
-    returnData.KeyPhrases.reverse().forEach((KeyPhrase) => {
-      // last bold
-      var b = "</mark>";
-      var position = KeyPhrase.EndOffset;
-      this.emailBody = [this.emailBody.slice(0, position), b, this.emailBody.slice(position)].join('');
+    returnData.KeyPhrases.reverse().forEach((keyPhrase: KeyPhrase) => {
 
-      // first bold
-      var b = "<mark>";
-      var position = KeyPhrase.BeginOffset;
-      this.emailBody = [this.emailBody.slice(0, position), b, this.emailBody.slice(position)].join('');
+      if (keyPhrase.Score > 0.999) {
 
+        // last highlight
+        var b = "</mark>";
+        var position = keyPhrase.EndOffset
+
+        this.emailBody = [this.emailBody.slice(0, position), b, this.emailBody.slice(position)].join('');
+
+        // first highlight
+        var b = "<mark>";
+        var position = keyPhrase.BeginOffset;
+        this.emailBody = [this.emailBody.slice(0, position), b, this.emailBody.slice(position)].join('');
+      }
     });
 
     return this.emailBody;
@@ -70,4 +74,3 @@ function getBody(): Promise<string> {
     }
   });
 }
-
