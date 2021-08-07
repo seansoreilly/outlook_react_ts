@@ -43,7 +43,9 @@ export default class DetectKeyPhrases {
         var b = "<mark>";
         var position = keyPhrase.BeginOffset;
         this.emailBody = [this.emailBody.slice(0, position), b, this.emailBody.slice(position)].join('');
+
       }
+
     });
 
     return this.emailBody;
