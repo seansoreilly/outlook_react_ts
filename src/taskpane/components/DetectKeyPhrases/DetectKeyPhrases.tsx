@@ -72,5 +72,6 @@ function getBody(): Promise<string> {
 
     finally {
     }
+
   });
 }
