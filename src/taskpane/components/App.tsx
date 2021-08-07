@@ -29,23 +29,8 @@ export default class App extends React.Component<AppProps, AppState> {
     };
   }
 
+  // not used at the moment
   componentDidMount() {
-    this.setState({
-      listItems: [
-        {
-          icon: "Ribbon",
-          primaryText: "Achieve more with Office integration",
-        },
-        {
-          icon: "Unlock",
-          primaryText: "Unlock features and functionality",
-        },
-        {
-          icon: "Design",
-          primaryText: "Create and visualize like a pro",
-        },
-      ],
-    });
   }
 
   click = async () => {
@@ -76,7 +61,6 @@ export default class App extends React.Component<AppProps, AppState> {
 
           <ActionButton
             className="ms-welcome__action"
-            // buttonType={ButtonType.hero}
             buttonType={ButtonType.command}
             iconProps={{ iconName: "ChevronRight" }}
             onClick={this.click}
@@ -91,26 +75,3 @@ export default class App extends React.Component<AppProps, AppState> {
     );
   }
 }
-
-// function getBody(): Promise<string> {
-
-//   return new Office.Promise(function (resolve, reject) {
-
-//     try {
-//       Office.context.mailbox.item.body.getAsync(
-//         'text',
-//         function (asyncResult) {
-//           resolve(asyncResult.value)
-//         }
-//       )
-//     }
-
-//     catch (error) {
-//       console.log(error.toString());
-//       reject(error.toString());
-//     }
-
-//     finally {
-//     }
-//   });
-// }
