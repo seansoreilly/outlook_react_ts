@@ -4,6 +4,7 @@ import { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
 import DetectKeyPhrases from "./DetectKeyPhrases/DetectKeyPhrases";
 
+// comment
 /* global Outlook, Office, OfficeExtension */
 
 // images references in the manifest
