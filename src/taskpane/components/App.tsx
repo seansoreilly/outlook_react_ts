@@ -1,25 +1,17 @@
 import * as React from "react";
-import { Button, ButtonType } from "office-ui-fabric-react";
-import Header from "./Header";
-import HeroList, { HeroListItem } from "./HeroList";
+import { ActionButton, ButtonType } from "office-ui-fabric-react";
+import { HeroListItem } from "./HeroList";
 import Progress from "./Progress";
-// import * as Functions from "./Functions";
-// import * as Commands from "../../commands/commands";
-require("../../../config.js");
-// declare var emailBody: string;
+import DetectKeyPhrases from "./DetectKeyPhrases/DetectKeyPhrases";
 
-import { ComprehendClient, DetectKeyPhrasesCommand, DetectKeyPhrasesCommandInput } from "@aws-sdk/client-comprehend";
-
+// comment
 /* global Outlook, Office, OfficeExtension */
 
 // images references in the manifest
 import "../../../assets/icon-16.png";
 import "../../../assets/icon-32.png";
 import "../../../assets/icon-80.png";
-// import { ResolvePlugin } from "webpack";
-
-// global variables
-let returnData: any;
+import ReactDOM = require("react-dom");
 
 export interface AppProps {
   title: string;
@@ -38,79 +30,24 @@ export default class App extends React.Component<AppProps, AppState> {
     };
   }
 
+  // not used at the moment
   componentDidMount() {
-    this.setState({
-      listItems: [
-        {
-          icon: "Ribbon",
-          primaryText: "Achieve more with Office integration",
-        },
-        {
-          icon: "Unlock",
-          primaryText: "Unlock features and functionality",
-        },
-        {
-          icon: "Design",
-          primaryText: "Create and visualize like a pro",
-        },
-      ],
-    });
   }
 
   click = async () => {
 
-    const creds = {
-      accessKeyId: process.env.accessKeyId,
-      secretAccessKey: process.env.secretAccessKey
-    };
+    const DKP = new DetectKeyPhrases();
+    await DKP.getKeyPhrases();
+    let emailBody: string = DKP.emailBody;
 
-    let emailBody: string = await getBody().then(function (result) {
-      return result;
-    });
+    const emailBodyHTML = <div className="Container" dangerouslySetInnerHTML={{ __html: emailBody }}></div>;
 
-    const client = new ComprehendClient({ region: process.env.region, credentials: creds });
-
-    const params: DetectKeyPhrasesCommandInput = {
-      LanguageCode: "en",
-      Text: emailBody
-    };
-
-    const command = new DetectKeyPhrasesCommand(params);
-
-    client.send(command).then(
-      (data) => {
-        returnData = data;
-      },
-      (error) => {
-        console.log(error)
-      }
-    );
-
-    returnData.KeyPhrases.reverse().forEach(KeyPhrase => {
-      console.log(KeyPhrase);
-      // last bold
-      var b = "</mark>";
-      var position = KeyPhrase.EndOffset;
-      emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
-
-      // first bold
-      var b = "<mark>";
-      var position = KeyPhrase.BeginOffset;
-      emailBody = [emailBody.slice(0, position), b, emailBody.slice(position)].join('');
-
-    });
-
-    console.log(emailBody);
-
-    // NB: can't alter body of email in read mode??  What else to do
-    // put text back into email
-    // await putBody(emailBody).then(function (result) {
-    //   return result;
-    // });
+    ReactDOM.render(emailBodyHTML, document.getElementById('displayResult'));
 
   };
 
   render() {
+
     const { title, isOfficeInitialized } = this.props;
 
     if (!isOfficeInitialized) {
@@ -120,70 +57,22 @@ export default class App extends React.Component<AppProps, AppState> {
     }
 
     return (
-      <div className="ms-welcome">
-        <Header logo="assets/logo-filled.png" title={this.props.title} message="Welcome" />
-        <HeroList message="Discover what Office Add-ins can do for you today!" items={this.state.listItems}>
-          <p className="ms-font-l">
-            Modify the source files, then click <b>Run</b>.
-          </p>
-          <Button
+      <div>
+        <div className="ms-welcome">
+
+          <ActionButton
             className="ms-welcome__action"
-            buttonType={ButtonType.hero}
+            buttonType={ButtonType.command}
             iconProps={{ iconName: "ChevronRight" }}
             onClick={this.click}
           >
             Run
-          </Button>
-        </HeroList>
+          </ActionButton >
+
+        </div>
+        <div id="displayResult" className="ms-welcome__html" >
+        </div>
       </div>
     );
   }
-}
-
-function getBody(): Promise<string> {
-
-  return new Office.Promise(function (resolve, reject) {
-
-    try {
-      Office.context.mailbox.item.body.getAsync(
-        'text',
-        function (asyncResult) {
-          resolve(asyncResult.value)
-        }
-      )
-    }
-
-    catch (error) {
-      console.log(error.toString());
-      reject(error.toString());
-    }
-
-    finally {
-    }
-  });
-}
-
-function putBody(sBody: string): Promise<any> {
-
-  return new Office.Promise(function (resolve, reject) {
-
-    try {
-      Office.context.mailbox.item.body.setAsync(
-        sBody,
-        { coercionType: Office.CoercionType.Html },
-        function (asyncResult) {
-          resolve(asyncResult.value)
-        }
-      )
-    }
-
-    catch (error) {
-      console.log(error.toString());
-      reject(error.toString());
-    }
-
-    finally {
-    }
-
-  });
 }
